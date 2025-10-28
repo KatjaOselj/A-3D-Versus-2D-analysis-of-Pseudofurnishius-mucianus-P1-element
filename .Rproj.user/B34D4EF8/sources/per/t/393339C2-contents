@@ -1,0 +1,170 @@
+library(dplyr)
+require(geomorph)
+
+#### Import landmarks into R ####
+
+landmarks <- readland.tps(
+  file="D:/posvetovanja_konference/ICOS6_Brazilija/Analize/3D/3D.TPS", 
+  specID = "ID", 
+  readcurves = TRUE
+)
+
+#### Generate a file with sample properties ####
+
+samples <- data.frame(name = rep(NA, dim(landmarks)[3]),
+                      part = rep(NA, dim(landmarks)[3]),
+                      country = rep(NA, dim(landmarks)[3]),
+                      section = rep(NA, dim(landmarks)[3]),
+                      layer = rep(NA, dim(landmarks)[3]),
+                      chirality = rep(NA, dim(landmarks)[3]),
+                      facieszone = rep(NA, dim(landmarks)[3]))
+
+for (i in 1:dim(landmarks)[3]) {
+  samples$name[i] <- dimnames(landmarks)[[3]][i]
+  samples$part[i] <- unlist(strsplit(samples$name[i], "_"))[1]
+  samples$country[i] <- unlist(strsplit(samples$name[i], "_"))[2]
+  samples$section[i] <- unlist(strsplit(samples$name[i], "_"))[3]
+  samples$layer[i] <- unlist(strsplit(samples$name[i], "_"))[4]
+  samples$chirality[i] <- unlist(strsplit(samples$name[i], "_"))[5]
+  samples$facieszone[i] <- unlist(strsplit(samples$name[i], "_"))[6]
+} 
+
+samples$part = case_when(samples$part == "NE" ~ "Northeastern", samples$part == "W"  ~ "Western")
+samples$country = case_when(samples$country == "SL" ~ "Slovenia", samples$country == "SP"  ~ "Spain")
+samples$section = case_when(samples$section == "PR" ~ "Prikrnica", samples$section == "BU"  ~ "Bugarra", samples$section == "LI"  ~ "Libros")
+samples$chirality = case_when(samples$chirality == "L" ~ "sinistral", samples$chirality == "R"  ~ "dextral")
+samples$facieszone = case_when(samples$facieszone == "FZ3" ~ "facies zone 3", samples$facieszone == "FZ8"  ~ "facies zone 8")
+
+# This can be made faster if the dataset becomes very big
+samples$part <- as.factor(samples$part)
+samples$country <- as.factor(samples$country)
+samples$section <- as.factor(samples$section)
+samples$layer <- as.factor(samples$layer)
+samples$chirality <- as.factor(samples$chirality)
+samples$facieszone <- as.factor(samples$facieszone)
+# basic inquiry
+samples
+table(samples$part)
+table(samples$country)
+table(samples$section)
+table(samples$chirality)
+table(samples$facieszone)
+
+xtabs(~ samples$section + samples$chirality)
+
+
+
+
+#### Procrustes analysis ####
+
+sliders <- define.sliders(7:96)
+landmarks.gpa<-gpagen(landmarks,
+                      curves = sliders)
+plot(landmarks.gpa)
+
+plotAllSpecimens(A = landmarks.gpa$coords,
+                 mean = TRUE,
+                 label = FALSE)
+
+#### Principal Component Analysis ####
+
+PCA <- gm.prcomp(landmarks.gpa$coords)
+plot(PCA)
+
+
+
+##### Plot by part #####
+
+plot(PCA$x[,1], PCA$x[,2],
+     pch = c(16, 15)[samples$part],
+     col = c("grey","#0033A0")[samples$part],
+     xlab = "PC 1",
+     ylab = "PC 2",
+     main = "Morphospace of the P. murcianus")
+legend(x = "bottomleft",
+       legend = levels(samples$part),
+       pch = c(16, 15),
+       col = c("grey","#0033A0"),
+       title = "Part of the Sephardic province")
+
+##### Plot by country #####
+
+plot(PCA$x[,1], PCA$x[,2],
+     pch = c(16, 15)[samples$country],
+     col = c("grey","#0033A0")[samples$country],
+     xlab = "PC 1",
+     ylab = "PC 2",
+     main = "Morphospace of P. murcianus")
+legend(x = "bottomleft",
+       legend = levels(samples$country),
+       pch = c(16, 15),
+       col = c("grey","#0033A0"),
+       title = "Country")
+
+##### Plot by section #####
+
+plot(PCA$x[,1], PCA$x[,2],
+     pch = c(16, 15, 17)[samples$section],
+     col = c("#0033A0","#91bfdb","grey")[samples$section],
+     xlab = "PC 1",
+     ylab = "PC 2",
+     main = "Morphospace of P. murcianus")
+legend(x = "bottomleft",
+       legend = levels(samples$section),
+       pch = c(16, 15, 17),
+       col = c("#0033A0","#91bfdb","grey"),
+       title = "Section")
+
+
+
+##### Plot by chirality #####
+plot(PCA$x[,1], PCA$x[,2],
+     pch = c(16, 15)[samples$chirality],
+     col = c("grey","#0033A0")[samples$chirality],
+     xlab = "PC 1",
+     ylab = "PC 2",
+     main = "Morphospace of P. murcianus")
+legend(x = "bottomleft",
+       legend = levels(samples$chirality),
+       pch = c(16, 15),
+       col = c("grey","#0033A0"),
+       title = "Chirality")
+
+
+
+#### Interpretation of the morphospace ####
+
+# mean shape
+msho <- mshape(landmarks.gpa$coords)
+plot(msho)
+
+# compare extremes of PC1 with the mean shape
+plotRefToTarget(PCA$shapes$shapes.comp1$min, msho,
+                method = "vector")
+plotRefToTarget(PCA$shapes$shapes.comp1$max, msho,
+                method = "vector")
+plotRefToTarget(PCA$shapes$shapes.comp2$min, msho,
+                method = "vector")
+plotRefToTarget(PCA$shapes$shapes.comp2$max, msho,
+                method = "vector")
+
+
+
+
+morphol.disparity(coords ~ 1, groups = samples$facieszone, 
+                  data = landmarks.gpa,  
+                  print.progress = TRUE)
+
+morphol.disparity(coords ~ 1, groups = samples$chirality, 
+                  data = landmarks.gpa,  
+                  print.progress = TRUE)
+
+morphol.disparity(coords ~ 1, groups = samples$section, 
+                  data = landmarks.gpa,  
+                  print.progress = TRUE)
+
+morphol.disparity(coords ~ 1, groups = samples$country, 
+                  data = landmarks.gpa,  
+                  print.progress = TRUE)
+
+
