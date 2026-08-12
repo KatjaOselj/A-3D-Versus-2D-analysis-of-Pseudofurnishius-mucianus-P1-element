@@ -219,6 +219,172 @@ morphospace_3Dall <- ggplot(samples3Dall, aes(x = PC1, y = PC2)) +
 screeplot(PCA_3Dall, type = "bar", npcs = 30)
 
 
+## Function to determine the number of informative PCs using the Broken Stick Model ----
+# After GUENSER et al., 2022
+doPcaSignif <- function(eigvals) {
+  
+  acron <- character()
+  criterion <- character()
+  nsigncomp <- numeric()
+  n <- length(eigvals)
+  
+  # Percentage variance explained
+  pcvars <- 100 * eigvals / sum(eigvals)
+  
+  # Broken stick model
+  bsm <- data.frame(j = seq_len(n), p = 0)
+  bsm$p[1] <- 1 / n
+  for(i in 2:n){
+    bsm$p[i] <- bsm$p[i - 1] + (1 / (n + 1 - i))
+  }
+  bsm$p <- 100 * bsm$p / n
+  bsvars <- rev(bsm$p)
+  
+  acron <- "BSM"
+  criterion <- "Broken stick model"
+  nsigncomp <- sum(pcvars >= bsvars)
+  
+  data.frame(acron, criterion, nsigncomp)
+}
+
+# Eigenvalues from your geomorph PCA 2D
+pcasign_2D <- doPcaSignif(PCA_2D$d^2)
+
+print(pcasign_2D)
+
+
+# Plot Eigenvalues of first 20 PCs, to visualise
+eigvals_all_2D <- (PCA_2D$d)^2
+
+# Number of PCs to display
+npcs_2D <- min(20, length(eigvals_all_2D))
+
+eigvals_2D <- eigvals_all_2D[1:npcs_2D]
+
+# % variance explained
+pcvars_2D <- 100 * eigvals_2D / sum(eigvals_all_2D)
+
+# Broken-stick expectations
+n_2D <- length(eigvals_all_2D)
+
+bsvars_all_2D <- sapply(1:n_2D, function(i) {
+  100 * sum(1/(i:n_2D))/n_2D
+})
+
+bsvars_2D <- bsvars_all_2D[1:npcs_2D]
+
+
+# Plot
+plot(pcvars_2D, type = "b", pch = 19,
+     xlab = "Principal Component",
+     ylab = "Variance explained (%)",
+     xlim = c(1, npcs_2D),
+     ylim = c(0, max(pcvars_2D, bsvars_2D) * 1.05),
+     main = "Scree Plot with Broken Stick Model")
+
+lines(bsvars_2D, type = "b", pch = 16, col = "red", lwd = 2)
+legend("topright",
+       legend = c("Observed", "Broken stick"),
+       fill = c(NA, NA),
+       border = c(NA, NA),
+       lty = c(1, 1),
+       pch = c(16, 16),
+       col = c("black", "red"))
+
+
+
+# Eigenvalues from your geomorph PCA 3Dsimp
+pcasign_3Dsimp <- doPcaSignif(PCA_3Dsimp$d^2)
+
+print(pcasign_3Dsimp)
+
+
+# Plot Eigenvalues of first 20 PCs, to visualise
+eigvals_all_3Dsimp <- (PCA_3Dsimp$d)^2
+
+# Number of PCs to display
+npcs_3Dsimp <- min(20, length(eigvals_all_3Dsimp))
+
+eigvals_3Dsimp <- eigvals_all_3Dsimp[1:npcs_3Dsimp]
+
+# % variance explained
+pcvars_3Dsimp <- 100 * eigvals_3Dsimp / sum(eigvals_all_3Dsimp)
+
+# Broken-stick expectations
+n_3Dsimp <- length(eigvals_all_3Dsimp)
+
+bsvars_all_3Dsimp <- sapply(1:n_3Dsimp, function(i) {
+  100 * sum(1/(i:n_3Dsimp))/n_3Dsimp
+})
+
+bsvars_3Dsimp <- bsvars_all_3Dsimp[1:npcs_3Dsimp]
+
+
+# Plot
+plot(pcvars_3Dsimp, type = "b", pch = 19,
+     xlab = "Principal Component",
+     ylab = "Variance explained (%)",
+     xlim = c(1, npcs_3Dsimp),
+     ylim = c(0, max(pcvars_3Dsimp, bsvars_3Dsimp) * 1.05),
+     main = "Scree Plot with Broken Stick Model")
+
+lines(bsvars_3Dsimp, type = "b", pch = 16, col = "red", lwd = 2)
+legend("topright",
+       legend = c("Observed", "Broken stick"),
+       fill = c(NA, NA),
+       border = c(NA, NA),
+       lty = c(1, 1),
+       pch = c(16, 16),
+       col = c("black", "red"))
+
+
+
+# Eigenvalues from your geomorph PCA 3Dall
+pcasign_3Dall <- doPcaSignif(PCA_3Dall$d^2)
+
+print(pcasign_3Dall)
+
+
+# Plot Eigenvalues of first 20 PCs, to visualise
+eigvals_all_3Dall <- (PCA_3Dall$d)^2
+
+# Number of PCs to display
+npcs_3Dall <- min(20, length(eigvals_all_3Dall))
+
+eigvals_3Dall <- eigvals_all_3Dall[1:npcs_3Dall]
+
+# % variance explained
+pcvars_3Dall <- 100 * eigvals_3Dall / sum(eigvals_all_3Dall)
+
+# Broken-stick expectations
+n_3Dall <- length(eigvals_all_3Dall)
+
+bsvars_all_3Dall <- sapply(1:n_3Dall, function(i) {
+  100 * sum(1/(i:n_3Dall))/n_3Dall
+})
+
+bsvars_3Dall <- bsvars_all_3Dall[1:npcs_3Dall]
+
+
+# Plot
+plot(pcvars_3Dall, type = "b", pch = 19,
+     xlab = "Principal Component",
+     ylab = "Variance explained (%)",
+     xlim = c(1, npcs_3Dall),
+     ylim = c(0, max(pcvars_3Dall, bsvars_3Dall) * 1.05),
+     main = "Scree Plot with Broken Stick Model")
+
+lines(bsvars_3Dall, type = "b", pch = 16, col = "red", lwd = 2)
+legend("topright",
+       legend = c("Observed", "Broken stick"),
+       fill = c(NA, NA),
+       border = c(NA, NA),
+       lty = c(1, 1),
+       pch = c(16, 16),
+       col = c("black", "red"))
+
+
+
 # Exploratory Data Analysis ----
 ## Length ----
 ### Outlier detection ----
@@ -290,109 +456,6 @@ par(mfrow = c(1, 1))
 
 
 
-# Chirality (detecting differences) ----
-## Length ----
-### 2D ----
-ggplot(data = samples2D, aes(x = chirality, y = length)) +
-  stat_boxplot(geom = "errorbar") +
-  geom_boxplot() +
-  labs(x = "", y = "Length (µm)") +
-  theme_bw()
-
-t.test(length ~ chirality, data = samples2D)
-
-### 3Dsimp ----
-ggplot(data = samples3Dsimp, aes(x = chirality, y = length)) +
-  stat_boxplot(geom = "errorbar") +
-  geom_boxplot() +
-  labs(x = "", y = "Length (µm)") +
-  theme_bw()
-
-t.test(length ~ chirality, data = samples3Dsimp)
-
-### 3Dall ----
-ggplot(data = samples3Dall, aes(x = chirality, y = length)) +
-  stat_boxplot(geom = "errorbar") +
-  geom_boxplot() +
-  labs(x = "", y = "Length (µm)") +
-  theme_bw()
-
-
-t.test(length ~ chirality, data = samples3Dall)
-
-
-## PC1 ----
-### 2D ----
-#### Homogeneity of variance ----
-ggplot(data = samples2D, aes(x = chirality, y = PC1)) +
-  stat_boxplot(geom = "errorbar") +
-  geom_boxplot() +
-  labs(x = "", y = "PC1") +
-  theme_bw()
-
-leveneTest(PC1 ~ chirality, data = samples2D)
-
-#### Mean shape ----
-mean_shape_left_2D <- geomorph::mshape(landmarks.gpa2D$coords[, , samples2D$chirality == "sinistral"])
-mean_shape_right_2D <- geomorph::mshape(landmarks.gpa2D$coords[, , samples2D$chirality == "dextral"])
-
-plot(mean_shape_left_2D, main = "Mean Shape: Left (Sinistral)")
-plot(mean_shape_right_2D, main = "Mean Shape: Right (Dextral)")
-
-#### morpho. disparity ----
-morphol.disparity(coords ~ 1, groups = samples2D$chirality, 
-                  data = landmarks.gpa2D,  
-                  print.progress = TRUE)
-
-
-### 3Dsimp ----
-#### Homogeneity of variance ----
-ggplot(data = samples3Dsimp, aes(x = chirality, y = PC1)) +
-  stat_boxplot(geom = "errorbar") +
-  geom_boxplot() +
-  labs(x = "", y = "PC1") +
-  theme_bw()
-
-leveneTest(PC1 ~ chirality, data = samples3Dsimp)
-
-#### Mean shape ----
-mean_shape_left_3Dsimp <- geomorph::mshape(landmarks.gpa3Dsimp$coords[, , samples3Dsimp$chirality == "sinistral"])
-mean_shape_right_3Dsimp <- geomorph::mshape(landmarks.gpa3Dsimp$coords[, , samples3Dsimp$chirality == "dextral"])
-
-plot(mean_shape_left_3Dsimp, main = "Mean Shape: Left (Sinistral)")
-plot(mean_shape_right_3Dsimp, main = "Mean Shape: Right (Dextral)")
-
-#### morpho. disparity ----
-morphol.disparity(coords ~ 1, groups = samples3Dsimp$chirality, 
-                  data = landmarks.gpa3Dsimp,  
-                  print.progress = TRUE)
-
-
-### 3Dall ----
-#### Homogeneity of variance ----
-ggplot(data = samples3Dall, aes(x = chirality, y = PC1)) +
-  stat_boxplot(geom = "errorbar") +
-  geom_boxplot() +
-  labs(x = "", y = "PC1") +
-  theme_bw()
-
-leveneTest(PC1 ~ chirality, data = samples3Dall)
-
-#### Mean shape ----
-mean_shape_left_3Dall <- geomorph::mshape(landmarks.gpa3Dall$coords[, , samples3Dall$chirality == "sinistral"])
-mean_shape_right_3Dall <- geomorph::mshape(landmarks.gpa3Dall$coords[, , samples3Dall$chirality == "dextral"])
-
-plot(mean_shape_left_3Dall, main = "Mean Shape: Left (Sinistral)")
-plot(mean_shape_right_3Dall, main = "Mean Shape: Right (Dextral)")
-
-#### morpho. disparity ----
-morphol.disparity(coords ~ 1, groups = samples3Dall$chirality, 
-                  data = landmarks.gpa3Dall,  
-                  print.progress = TRUE)
-
-
-
-
 # Shape ----
 ## Mean shape ----
 ### 2D ----
@@ -422,7 +485,8 @@ plotRefToTarget(PCA_2D$shapes$shapes.comp1$min, msho2D, method = "vector")
 plotRefToTarget(PCA_2D$shapes$shapes.comp1$max, msho2D, method = "vector")
 plotRefToTarget(PCA_2D$shapes$shapes.comp2$min, msho2D, method = "vector")
 plotRefToTarget(PCA_2D$shapes$shapes.comp2$max, msho2D, method = "vector")
-
+plotRefToTarget(PCA_2D$shapes$shapes.comp3$min, msho2D, method = "vector")
+plotRefToTarget(PCA_2D$shapes$shapes.comp3$max, msho2D, method = "vector")
 #dev.off()
 
 ### 3Dsimp ----
@@ -430,6 +494,8 @@ plotRefToTarget(PCA_3Dsimp$shapes$shapes.comp1$min, msho3Dsimp, method = "vector
 plotRefToTarget(PCA_3Dsimp$shapes$shapes.comp1$max, msho3Dsimp, method = "vector")
 plotRefToTarget(PCA_3Dsimp$shapes$shapes.comp2$min, msho3Dsimp, method = "vector")
 plotRefToTarget(PCA_3Dsimp$shapes$shapes.comp2$max, msho3Dsimp, method = "vector")
+plotRefToTarget(PCA_3Dsimp$shapes$shapes.comp3$min, msho3Dsimp, method = "vector")
+plotRefToTarget(PCA_3Dsimp$shapes$shapes.comp3$max, msho3Dsimp, method = "vector")
 
 # rgl.snapshot("OUTPUT/Shape/Extreme_values_3Dsimp/PC2_max_rostral.png")
 
@@ -439,20 +505,21 @@ plotRefToTarget(PCA_3Dall$shapes$shapes.comp1$min, msho3Dall, method = "vector")
 plotRefToTarget(PCA_3Dall$shapes$shapes.comp1$max, msho3Dall, method = "vector")
 plotRefToTarget(PCA_3Dall$shapes$shapes.comp2$min, msho3Dall, method = "vector")
 plotRefToTarget(PCA_3Dall$shapes$shapes.comp2$max, msho3Dall, method = "vector")
-
+plotRefToTarget(PCA_3Dall$shapes$shapes.comp3$min, msho3Dall, method = "vector")
+plotRefToTarget(PCA_3Dall$shapes$shapes.comp3$max, msho3Dall, method = "vector")
 # rgl.snapshot("OUTPUT/Shape/Extreme_values_3Dall/PC2_min_oral.png")
 
 
 # Comparison 2D vs 3D ----
 ## 2D vs 3Dsimp ----
-protest(X = PCA_2D$x[,1:8], Y = PCA_3Dsimp$x[,1:8], permutations = 9999)
+protest(X = PCA_2D$x[,1:3], Y = PCA_3Dsimp$x[,1:3], permutations = 9999)
 
 
 ## 2D vs 3Dall ----
-protest(X = PCA_2D$x[,1:8], Y = PCA_3Dall$x[,1:8], permutations = 9999)
+protest(X = PCA_2D$x[,1:3], Y = PCA_3Dall$x[,1:3], permutations = 9999)
 
 
 ## 3Dsimp vs 3Dall ----
-protest(X = PCA_3Dsimp$x[,1:8], Y = PCA_3Dall$x[,1:8], permutations = 9999)
+protest(X = PCA_3Dsimp$x[,1:3], Y = PCA_3Dall$x[,1:3], permutations = 9999)
 
 
