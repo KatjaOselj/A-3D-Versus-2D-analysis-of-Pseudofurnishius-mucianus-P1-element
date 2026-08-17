@@ -5,6 +5,7 @@ library(ggfortify)
 library(dplyr)
 library(car)
 library(rgl)
+library("plot3D")
 set.seed(42)
 
 # Import data ----
@@ -139,7 +140,8 @@ PC1 <- PCA_2D$x[, 1]
 samples2D$PC1 <- PC1
 PC2 <- PCA_2D$x[, 2]
 samples2D$PC2 <- PC2
-
+PC3 <- PCA_2D$x[, 3]
+samples2D$PC3 <- PC3
 
 morphospace_2D <- ggplot(samples2D, aes(x = PC1, y = PC2)) +
   geom_point(
@@ -157,8 +159,29 @@ morphospace_2D <- ggplot(samples2D, aes(x = PC1, y = PC2)) +
 
 # ggsave("OUTPUT/morphospace/2D.jpg",morphospace_2D, width=170, height=100, units="mm", dpi = 300)
 
-### representation of information by PCA ----
-screeplot(PCA_2D, type = "bar", npcs = 30)
+scatter3D(samples2D$PC1, samples2D$PC2, samples2D$PC3, clab = c("PC1", "PC2", "PC3"), col = "#47479fff", pch = 19, cex = 2, bty = "g", xlab = "PC1", ylab = "PC2", zlab = "PC3", theta = 0, phi = 20)
+scatter3D(samples2D$PC1, samples2D$PC2, samples2D$PC3, clab = c("PC1", "PC2", "PC3"), col = "#47479fff", pch = 19, cex = 2, bty = "g", xlab = "PC1", ylab = "PC2", zlab = "PC3", theta = 45, phi = 20)
+scatter3D(samples2D$PC1, samples2D$PC2, samples2D$PC3, clab = c("PC1", "PC2", "PC3"), col = "#47479fff", pch = 19, cex = 2, bty = "g", xlab = "PC1", ylab = "PC2", zlab = "PC3", theta = 70, phi = 20)
+
+# code for plot named scatter3D_2D, modified after Kassambara, A. (2026). 3D and 4D Plots in R with the plot3D Package. Datanovia, July 12, 2026.
+scatter3D_2D <- function(x, y, z, ..., colvar = NULL) {
+  panelfirst <- function(pmat) {
+    XY <- trans3D(x, y, z = rep(min(z), length(z)), pmat = pmat)
+    scatter2D(XY$x, XY$y, col = "#47479fff", pch = ".",
+              cex = 2, add = TRUE, colkey = FALSE)
+    XY <- trans3D(x = rep(min(x), length(x)), y, z, pmat = pmat)
+    scatter2D(XY$x, XY$y, col = "#47479fff", pch = ".",
+              cex = 2, add = TRUE, colkey = FALSE)
+  }
+  scatter3D(x, y, z, ..., col = "#47479fff", panel.first = panelfirst,
+            colkey = FALSE)
+}
+scatter3D_2D(samples2D$PC2, samples2D$PC1, samples2D$PC3, pch = 19, cex = 1.5, bty = "g", xlab = "PC2 (19%)", ylab = "PC1 (31%)", zlab = "PC3 (13%)", ticktype = "detailed", theta = 45, phi = 20, d = 2)
+
+
+plot3d(samples2D$PC1, samples2D$PC2, samples2D$PC3, clab = c("PC1", "PC2", "PC3"), col = "#47479fff", pch = 19, cex = 5, bty = "g", xlab = "PC1 (31%)", ylab = "PC2 (19%)", zlab = "PC3 (13%)")
+
+
 
 ## 3Dsimp ----
 PCA_3Dsimp <- gm.prcomp(landmarks.gpa3Dsimp$coords)
@@ -169,6 +192,8 @@ PC1 <- PCA_3Dsimp$x[, 1]
 samples3Dsimp$PC1 <- PC1
 PC2 <- PCA_3Dsimp$x[, 2]
 samples3Dsimp$PC2 <- PC2
+PC3 <- PCA_3Dsimp$x[, 3]
+samples3Dsimp$PC3 <- PC3
 
 morphospace_3Dsimp <- ggplot(samples3Dsimp, aes(x = PC1, y = PC2)) +
   geom_point(
@@ -186,8 +211,26 @@ morphospace_3Dsimp <- ggplot(samples3Dsimp, aes(x = PC1, y = PC2)) +
 
 # ggsave("OUTPUT/morphospace/3Dsimp.jpg",morphospace_3Dsimp, width=170, height=100, units="mm", dpi = 300)
 
-### representation of information by PCA ----
-screeplot(PCA_3Dsimp, type = "bar", npcs = 30)
+scatter3D(samples3Dsimp$PC1, samples3Dsimp$PC2, samples3Dsimp$PC3, clab = c("PC1", "PC2", "PC3"), col = "#227a22ff", pch = 19, cex = 2, bty = "g", xlab = "PC1", ylab = "PC2", zlab = "PC3", theta = 0, phi = 20)
+scatter3D(samples3Dsimp$PC1, samples3Dsimp$PC2, samples3Dsimp$PC3, clab = c("PC1", "PC2", "PC3"), col = "#227a22ff", pch = 19, cex = 2, bty = "g", xlab = "PC1", ylab = "PC2", zlab = "PC3", theta = 45, phi = 20)
+scatter3D(samples3Dsimp$PC1, samples3Dsimp$PC2, samples3Dsimp$PC3, clab = c("PC1", "PC2", "PC3"), col = "#227a22ff", pch = 19, cex = 2, bty = "g", xlab = "PC1", ylab = "PC2", zlab = "PC3", theta = 70, phi = 20)
+
+# code for plot named scatter3D_2D, modified after Kassambara, A. (2026). 3D and 4D Plots in R with the plot3D Package. Datanovia, July 12, 2026.
+scatter3D_3Dsimp <- function(x, y, z, ..., colvar = NULL) {
+  panelfirst <- function(pmat) {
+    XY <- trans3D(x, y, z = rep(min(z), length(z)), pmat = pmat)
+    scatter2D(XY$x, XY$y, col = "#227a22ff", pch = ".",
+              cex = 2, add = TRUE, colkey = FALSE)
+    XY <- trans3D(x = rep(min(x), length(x)), y, z, pmat = pmat)
+    scatter2D(XY$x, XY$y, col = "#227a22ff", pch = ".",
+              cex = 2, add = TRUE, colkey = FALSE)
+  }
+  scatter3D(x, y, z, ..., col = "#227a22ff", panel.first = panelfirst,
+            colkey = FALSE)
+}
+scatter3D_3Dsimp(samples3Dsimp$PC2, samples3Dsimp$PC1, samples3Dsimp$PC3, pch = 19, cex = 1.5, bty = "g", xlab = "PC2 (19%)", ylab = "PC1 (34%)", zlab = "PC3 (14)", ticktype = "detailed", theta = 45, phi = 20, d = 2)
+
+plot3d(samples3Dsimp$PC1, samples3Dsimp$PC2, samples3Dsimp$PC3, clab = c("PC1", "PC2", "PC3"), col = "#227a22ff", pch = 19, cex = 5, bty = "g", xlab = "PC1", ylab = "PC2", zlab = "PC3")
 
 
 ## 3Dall ----
@@ -199,6 +242,8 @@ PC1 <- PCA_3Dall$x[, 1]
 samples3Dall$PC1 <- PC1
 PC2 <- PCA_3Dall$x[, 2]
 samples3Dall$PC2 <- PC2
+PC3 <- PCA_3Dall$x[, 3]
+samples3Dall$PC3 <- PC3
 
 morphospace_3Dall <- ggplot(samples3Dall, aes(x = PC1, y = PC2)) +
   geom_point(
@@ -215,8 +260,31 @@ morphospace_3Dall <- ggplot(samples3Dall, aes(x = PC1, y = PC2)) +
 
 # ggsave("OUTPUT/morphospace/3Dall.jpg",morphospace_3Dall, width=170, height=100, units="mm", dpi = 300)
 
-### representation of information by PCA ----
-screeplot(PCA_3Dall, type = "bar", npcs = 30)
+scatter3D(samples3Dall$PC1, samples3Dall$PC2, samples3Dall$PC3, clab = c("PC1", "PC2", "PC3"), col = "#ffaf4dff", pch = 19, cex = 2, bty = "g", xlab = "PC1", ylab = "PC2", zlab = "PC3", theta = 0, phi = 20)
+scatter3D(samples3Dall$PC1, samples3Dall$PC2, samples3Dall$PC3, clab = c("PC1", "PC2", "PC3"), col = "#ffaf4dff", pch = 19, cex = 2, bty = "g", xlab = "PC1", ylab = "PC2", zlab = "PC3", theta = 45, phi = 20)
+scatter3D(samples3Dall$PC1, samples3Dall$PC2, samples3Dall$PC3, clab = c("PC1", "PC2", "PC3"), col = "#ffaf4dff", pch = 19, cex = 2, bty = "g", xlab = "PC1", ylab = "PC2", zlab = "PC3", theta = 70, phi = 20)
+scatter3D(samples3Dall$PC1, samples3Dall$PC2, samples3Dall$PC3, clab = c("PC1", "PC2", "PC3"), col = "#ffaf4dff", pch = 19, cex = 2, bty = "g", xlab = "PC1", ylab = "PC2", zlab = "PC3", theta = 0, phi = 0)
+scatter3D(samples3Dall$PC1, samples3Dall$PC2, samples3Dall$PC3, clab = c("PC1", "PC2", "PC3"), col = "#ffaf4dff", pch = 19, cex = 2, bty = "g", xlab = "PC1", ylab = "PC2", zlab = "PC3", theta = 45, phi = 0)
+scatter3D(samples3Dall$PC1, samples3Dall$PC2, samples3Dall$PC3, clab = c("PC1", "PC2", "PC3"), col = "#ffaf4dff", pch = 19, cex = 2, bty = "g", xlab = "PC1", ylab = "PC2", zlab = "PC3", theta = 70, phi = 0)
+
+# code for plot named scatter3D_2D, modified after Kassambara, A. (2026). 3D and 4D Plots in R with the plot3D Package. Datanovia, July 12, 2026.
+scatter3D_3Dall <- function(x, y, z, ..., colvar = NULL) {
+  panelfirst <- function(pmat) {
+    XY <- trans3D(x, y, z = rep(min(z), length(z)), pmat = pmat)
+    scatter2D(XY$x, XY$y, col = "#ffaf4dff", pch = ".",
+              cex = 2, add = TRUE, colkey = FALSE)
+    XY <- trans3D(x = rep(min(x), length(x)), y, z, pmat = pmat)
+    scatter2D(XY$x, XY$y, col = "#ffaf4dff", pch = ".",
+              cex = 2, add = TRUE, colkey = FALSE)
+  }
+  scatter3D(x, y, z, ..., col = "#ffaf4dff", panel.first = panelfirst,
+            colkey = FALSE)
+}
+scatter3D_3Dall(samples3Dall$PC2, samples3Dall$PC1, samples3Dall$PC3, pch = 19, cex = 1.5, bty = "g", xlab = "PC2 (14%)", ylab = "PC1 (28%)", zlab = "PC3(11%)", ticktype = "detailed", theta = 45, phi = 20, d = 2)
+
+plot3d(samples3Dall$PC1, samples3Dall$PC2, samples3Dall$PC3, clab = c("PC1", "PC2", "PC3"), col = "#ffaf4dff", pch = 19, cex = 5, bty = "g", xlab = "PC1", ylab = "PC2", zlab = "PC3")
+
+
 
 
 ## Function to determine the number of informative PCs using the Broken Stick Model ----
@@ -497,7 +565,7 @@ plotRefToTarget(PCA_3Dsimp$shapes$shapes.comp2$max, msho3Dsimp, method = "vector
 plotRefToTarget(PCA_3Dsimp$shapes$shapes.comp3$min, msho3Dsimp, method = "vector")
 plotRefToTarget(PCA_3Dsimp$shapes$shapes.comp3$max, msho3Dsimp, method = "vector")
 
-# rgl.snapshot("OUTPUT/Shape/Extreme_values_3Dsimp/PC2_max_rostral.png")
+# rgl.snapshot("OUTPUT/Shape/Extreme_values_3Dsimp/PC3_max_oral.png")
 
 
 ### 3Dall ----
@@ -507,7 +575,7 @@ plotRefToTarget(PCA_3Dall$shapes$shapes.comp2$min, msho3Dall, method = "vector")
 plotRefToTarget(PCA_3Dall$shapes$shapes.comp2$max, msho3Dall, method = "vector")
 plotRefToTarget(PCA_3Dall$shapes$shapes.comp3$min, msho3Dall, method = "vector")
 plotRefToTarget(PCA_3Dall$shapes$shapes.comp3$max, msho3Dall, method = "vector")
-# rgl.snapshot("OUTPUT/Shape/Extreme_values_3Dall/PC2_min_oral.png")
+# rgl.snapshot("OUTPUT/Shape/Extreme_values_3Dall/PC3_max_caudal.png")
 
 
 # Comparison 2D vs 3D ----
