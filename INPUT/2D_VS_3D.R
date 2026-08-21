@@ -6,7 +6,6 @@ library(dplyr)
 library(car)
 library(rgl)
 library("plot3D")
-set.seed(42)
 
 # Import data ----
 ## 2D ----
@@ -112,6 +111,7 @@ samples3Dall$chirality <- as.factor(samples3Dall$chirality)
 samples3Dall$length <- as.numeric(samples3Dall$length)
 
 
+set.seed(42)
 
 # Procrustes superposition ----
 ## 2D ----
@@ -577,6 +577,7 @@ plotRefToTarget(PCA_3Dall$shapes$shapes.comp3$min, msho3Dall, method = "vector")
 plotRefToTarget(PCA_3Dall$shapes$shapes.comp3$max, msho3Dall, method = "vector")
 # rgl.snapshot("OUTPUT/Shape/Extreme_values_3Dall/PC3_max_caudal.png")
 
+set.seed(42)
 
 # Comparison 2D vs 3D ----
 ## 2D vs 3Dsimp ----
