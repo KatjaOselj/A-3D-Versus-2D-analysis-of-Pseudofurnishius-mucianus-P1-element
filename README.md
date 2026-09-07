@@ -1,6 +1,6 @@
 # 3D Versus 2D analysis of *Pseudofurnishius murcianus*
 
-Code and data supporting the manuscript “Quantifying Conodont Shape: Comparing 2D and 3D Geometric Morphometrics”
+This repository contains the code and 3D models associated with the manuscript “Quantifying Conodont Shape: Comparing 2D and 3D Geometric Morphometrics”, resulting from the EXCITE Conomorph-3D project (E2_C1_75_Oselj).
 
 ## Authors
 
@@ -39,57 +39,33 @@ carlos.martinez-perez@uv.es
 ## Repository structure
 
 ```
-Code/
+A-3D-Versus-2D-analysis-of-Pseudofurnishius-mucianus-P1-element/
 ├── README.md
-├── INPUT/
-│   ├── 2D.TPS          # Raw landmark coordinates for 2D dataset (TPS format)
-│   ├── 3Dall.TPS       # Raw landmark coordinates for 3Dall dataset (TPS format)
-│   ├── 3Dsimp.TPS      # Raw landmark coordinates for 3Dsimp dataset (TPS format)
-│   └── 2D_VS_3D.R      # Read TPS file, run GPA and PCA, Statistical analyses (Procrustes permutation test)
+├── Code/
+│   ├── INPUT/
+│       ├── 2D.TPS          # Raw landmark coordinates for 2D dataset (TPS format)
+│       ├── 3Dall.TPS       # Raw landmark coordinates for 3Dall dataset (TPS format)
+│       ├── 3Dsimp.TPS      # Raw landmark coordinates for 3Dsimp dataset (TPS format)
+│       └── 2D_VS_3D.R      # Read TPS file, run GPA and PCA, Statistical analyses (Procrustes permutation test)
  dataset
-├── Figs/               # Figures used in MS (Fig.1-3)
-├── curveslide.csv      # information about sliding semilandmarks
-└── 2D_VS_3D.Rproj
+│   ├── Figs/               # Figures used in MS (Fig.1-3)
+│   ├── curveslide.csv      # information about sliding semilandmarks
+│   ├── 2D_VS_3D.Rproj
+│   └──  README.md          # README for R code
+├── 3Dmodels/
+    ├── Bu-I-26-37.ply
+    ├── Bu-I-26-81.ply
+    ├── ...
+    ├── PR24-19.ply
+    ├── model_metadata.xlsx
+    └──  README.md          # README for 3D models
+
 ```
 
-## Software requirements
 
-R (≥ 4.1.0) with the following packages:
+## License
 
-| Package | Purpose |
-|---------|---------|
-| `geomorph` | Landmark import, GPA, PCA, morphometric analyses |
-| `vegan` | Multivariate community-ecology statistics |
-| `car` | Levene's test for variance homogeneity |
-| `ggplot2` | Plotting |
-| `ggfortify` | Plotting |
-| `rgl` | Interactive 3D graphics |
-| `dplyr` | Data manipulation |
-| `plot3D` | 3D plotting |
-| `knitr` | R Markdown rendering |
-
-Install all packages at once:
-
-```r
-install.packages(c(
-  "geomorph", "vegan", "car", "ggplot2", 
-  "ggfortify", "rgl", "dplyr", "plot3D", 
-  "knitr"
-))
-```
-
-## Running instructions
-
-Open `2D_VS_3D.Rproj` in RStudio (or set the project root as the working directory), then run the scripts in the following order:
-
-1. **Import and process data**
-   ```r
-   source("INPUT/2D_VS_3D.R")   # reads All_sections.TPS, runs GPA + PCA and Procrustes permutation test
-
-   ```
-
-
-## License 
+### Code
 
 Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -102,6 +78,12 @@ Licensed under the Apache License, Version 2.0 (the "License");
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
+   
+### 3D models and metadata
+
+The 3D models and associated metadata are made available under the
+Creative Commons Attribution 4.0 International (CC BY 4.0) License.
+
 
 ## Copyright
 
