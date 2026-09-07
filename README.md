@@ -48,7 +48,6 @@ P.murcianus_geometric_morphometrics/
  dataset
 ├── Figs/               # Figures used in MS (Fig.1-3)
 ├── curveslide.csv      # information about sliding semilandmarks
-├── 3D_models           # all 3D models used in this analysis
 └── 2D_VS_3D.Rproj
 ```
 
