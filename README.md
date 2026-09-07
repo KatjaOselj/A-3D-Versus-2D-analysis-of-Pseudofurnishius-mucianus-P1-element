@@ -45,17 +45,10 @@ P.murcianus_geometric_morphometrics/
 │   ├── 3Dall.TPS       # Raw landmark coordinates for 3Dall dataset (TPS format)
 │   ├── 3Dsimp.TPS      # Raw landmark coordinates for 3Dsimp dataset (TPS format)
 │   └── 2D_VS_3D.R      # Read TPS file, run GPA and PCA, Statistical analyses (Procrustes permutation test)
-├── OUTPUT/
-│   ├── Exploratory Data Analysis/     # Output figures (Length distribution_boxplot, Length distribution_hist, PC1 distribution_boxplot, PC1 distribution_hist)
-│   └──  Shape/
-│        ├── Extreme_values_3Dall/     # Figures of shapes of extreme values 3Dall dataset
-│        ├── Extreme_values_3Dsimp/    # Figures of shapes of extreme values 3Dsimp dataset
-│        ├── Mean_shape_3Dall/         # Figures of mean shpe of elements in 3Dall dataset 
-│        ├── Mean_shape_3Dsimp/        # Figures of mean shpe of elements in 3Dsimp dataset
-│        ├── Extreme_values_2D         # Figure of shapes of extreme values 2D dataset
-│        └──  Mean_shape_2D            # Figure of mean shpe of elements in 2D dataset
+ dataset
 ├── Figs/               # Figures used in MS (Fig.1-3)
 ├── curveslide.csv      # information about sliding semilandmarks
+├── 3D_models           # all 3D models used in this analysis
 └── 2D_VS_3D.Rproj
 ```
 
