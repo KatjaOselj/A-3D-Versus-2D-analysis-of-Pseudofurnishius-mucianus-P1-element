@@ -22,13 +22,13 @@ Bogdan Jurkovšek
 geolog.bj@gmail.com
 
 Vogel Hannah
-h.p.vogel@uu.nl
+HVogel@ucc.ie
 
 Amiri Hamed
 h.amiri@uu.nl
 
 Plümper Oliver
-o.plumper@uu.nl
+pluemper@uni-bremen.de
 
 Carlos Martínez-Pérez 
 carlos.martinez-perez@bristol.ac.uk
