@@ -43,7 +43,7 @@ samples2D$chirality <- as.factor(samples2D$chirality)
 samples2D$length <- as.numeric(samples2D$length)
 
 ## 2D_from3D ----
-landmarks2D_from3D <- readland.tps(file = "INPUT/2D_from_3D.TPS", specID = "ID", readcurves = TRUE)
+landmarks2D_from3D <- readland.tps(file = "INPUT/equal70.TPS", specID = "ID", readcurves = TRUE)
 
 samples2D_from3D <- data.frame(name = rep(NA, dim(landmarks2D_from3D)[3]),
                                region = rep(NA, dim(landmarks2D_from3D)[3]),
@@ -235,10 +235,10 @@ samples2D_from3D$PC3 <- PC3
 
 morphospace_2D_from3D <- ggplot(samples2D_from3D, aes(x = PC1, y = PC2)) +
   geom_point(
-    shape = 21, fill = "darkblue", color = "black", size = 5) +
+    shape = 21, fill = "lightcoral", color = "black", size = 5) +
   labs(
-    x = "PC1 (30%)",
-    y = "PC2 (18%)"
+    x = "PC1 (31%)",
+    y = "PC2 (19%)"
   ) +
   theme_minimal() +
   theme(
@@ -248,26 +248,26 @@ morphospace_2D_from3D <- ggplot(samples2D_from3D, aes(x = PC1, y = PC2)) +
 
 
 # ggsave("OUTPUT/morphospace/2D_from3D.jpg",morphospace_2D_from3D, width=170, height=100, units="mm", dpi = 300)
-scatter3D(samples2D_from3D$PC2,samples2D_from3D$PC1,samples2D_from3D$PC3,xlab = "PC2",  ylab = "PC1",zlab = "PC3", col = "darkblue",pch = 19, cex = 2,bty = "g",theta = 45, phi = 20)
+scatter3D(samples2D_from3D$PC2,samples2D_from3D$PC1,samples2D_from3D$PC3,xlab = "PC2",  ylab = "PC1",zlab = "PC3", col = "lightcoral",pch = 19, cex = 2,bty = "g",theta = 45, phi = 20)
 
 # code for plot named scatter3D_2D, modified after Kassambara, A. (2026). 3D and 4D Plots in R with the plot3D Package. Datanovia, July 12, 2026.
 scatter3D_2D_from3D <- function(x, y, z, ..., colvar = NULL) {
   panelfirst <- function(pmat) {
     XY <- trans3D(x, y, z = rep(min(z), length(z)), pmat = pmat)
-    scatter2D(XY$x, XY$y, col = "darkblue", pch = ".",
+    scatter2D(XY$x, XY$y, col = "lightcoral", pch = ".",
               cex = 2, add = TRUE, colkey = FALSE)
     XY <- trans3D(x = rep(min(x), length(x)), y, z, pmat = pmat)
-    scatter2D(XY$x, XY$y, col = "darkblue", pch = ".",
+    scatter2D(XY$x, XY$y, col = "lightcoral", pch = ".",
               cex = 2, add = TRUE, colkey = FALSE)
   }
-  scatter3D(x, y, z, ..., col = "darkblue", panel.first = panelfirst,
+  scatter3D(x, y, z, ..., col = "lightcoral", panel.first = panelfirst,
             colkey = FALSE)
 }
 
-scatter3D_2D_from3D(samples2D_from3D$PC2, samples2D_from3D$PC1, samples2D_from3D$PC3, pch = 19, cex = 1.5, bty = "g", xlab = "PC2 (18%)", ylab = "PC1 (30%)", zlab = "PC3 (12%)", ticktype = "detailed", theta = 45, phi = 20, d = 2)
+scatter3D_2D_from3D(samples2D_from3D$PC2, samples2D_from3D$PC1, samples2D_from3D$PC3, pch = 19, cex = 1.5, bty = "g", xlab = "PC2 (19%)", ylab = "PC1 (31%)", zlab = "PC3 (13%)", ticktype = "detailed", theta = 45, phi = 20, d = 2)
 
 
-plot3d(samples2D_from3D$PC1, samples2D_from3D$PC2, samples2D_from3D$PC3, clab = c("PC1", "PC2", "PC3"), col = "darkblue", pch = 19, cex = 5, bty = "g", xlab = "PC1 (30%)", ylab = "PC2 (18%)", zlab = "PC3 (12%)")
+plot3d(samples2D_from3D$PC1, samples2D_from3D$PC2, samples2D_from3D$PC3, clab = c("PC1", "PC2", "PC3"), col = "lightcoral", pch = 19, cex = 5, bty = "g", xlab = "PC1 (30%)", ylab = "PC2 (18%)", zlab = "PC3 (12%)")
 
 
 ### representation of information by PCA ----
@@ -748,24 +748,20 @@ plotRefToTarget(PCA_3Dall$shapes$shapes.comp3$max, msho3Dall, method = "vector")
 set.seed(42)
 
 # Comparison 2D vs 3D ----
-## 2D vs 3Dsimp ----
-protest(X = PCA_2D$x[,1:3], Y = PCA_3Dsimp$x[,1:3], permutations = 9999)
-
-
-## 2D vs 3Dall ----
-protest(X = PCA_2D$x[,1:3], Y = PCA_3Dall$x[,1:3], permutations = 9999)
 
 ## 2D vs 2D_from3D ----
 protest(X = PCA_2D$x[,1:3], Y = PCA_2D_from3D$x[,1:3], permutations = 9999)
 
-## 3Dsimp vs 3Dall ----
-protest(X = PCA_3Dsimp$x[,1:3], Y = PCA_3Dall$x[,1:3], permutations = 9999)
-
 ## 3Dsimp vs 2D_from3D ----
 protest(X = PCA_3Dsimp$x[,1:3], Y = PCA_2D_from3D$x[,1:3], permutations = 9999)
 
-## 3Dall vs 2D_from3D ----
-protest(X = PCA_3Dall$x[,1:3], Y = PCA_2D_from3D$x[,1:3], permutations = 9999)
+## 3Dsimp vs 3Dall ----
+protest(X = PCA_3Dsimp$x[,1:3], Y = PCA_3Dall$x[,1:3], permutations = 9999)
+
+## 2D vs 3Dall ----
+protest(X = PCA_2D$x[,1:3], Y = PCA_3Dall$x[,1:3], permutations = 9999)
+
+
 
 
 
@@ -773,23 +769,18 @@ protest(X = PCA_3Dall$x[,1:3], Y = PCA_2D_from3D$x[,1:3], permutations = 9999)
 
 set.seed(42)
 
-boot_2D_VS_3Dsimp <- replicate(9999, {
-  i <- sample(1:nrow(PCA_2D$x[,1:3]), replace = TRUE)
-  protest(PCA_2D$x[,1:3][i,], PCA_3Dsimp$x[,1:3][i,], permutations = 0)$t0
-})
-quantile(boot_2D_VS_3Dsimp, c(0.025, 0.975))
-
 boot_2D_VS_2D_from3D <- replicate(9999, {
   i <- sample(1:nrow(PCA_2D$x[,1:3]), replace = TRUE)
   protest(PCA_2D$x[,1:3][i,], PCA_2D_from3D$x[,1:3][i,], permutations = 0)$t0
 })
 quantile(boot_2D_VS_2D_from3D, c(0.025, 0.975))
 
-boot_2D_VS_3Dall <- replicate(9999, {
-  i <- sample(1:nrow(PCA_2D$x[,1:3]), replace = TRUE)
-  protest(PCA_2D$x[,1:3][i,], PCA_3Dall$x[,1:3][i,], permutations = 0)$t0
+
+boot_3Dsimp_VS_PCA_2D_from3D <- replicate(9999, {
+  i <- sample(1:nrow(PCA_2D_from3D$x[,1:3]), replace = TRUE)
+  protest(PCA_2D_from3D$x[,1:3][i,], PCA_3Dsimp$x[,1:3][i,], permutations = 0)$t0
 })
-quantile(boot_2D_VS_3Dall, c(0.025, 0.975))
+quantile(boot_3Dsimp_VS_PCA_2D_from3D, c(0.025, 0.975))
 
 
 boot_3Dsimp_VS_3Dall <- replicate(9999, {
@@ -798,109 +789,16 @@ boot_3Dsimp_VS_3Dall <- replicate(9999, {
 })
 quantile(boot_3Dsimp_VS_3Dall, c(0.025, 0.975))
 
-boot_3Dsimp_VS_PCA_2D_from3D <- replicate(9999, {
-  i <- sample(1:nrow(PCA_3Dsimp$x[,1:3]), replace = TRUE)
-  protest(PCA_3Dsimp$x[,1:3][i,], PCA_2D_from3D$x[,1:3][i,], permutations = 0)$t0
-})
-quantile(boot_3Dsimp_VS_PCA_2D_from3D, c(0.025, 0.975))
 
-boot_3Dall_VS_PCA_2D_from3D <- replicate(9999, {
-  i <- sample(1:nrow(PCA_3Dall$x[,1:3]), replace = TRUE)
-  protest(PCA_3Dall$x[,1:3][i,], PCA_2D_from3D$x[,1:3][i,], permutations = 0)$t0
+boot_2D_VS_3Dall <- replicate(9999, {
+  i <- sample(1:nrow(PCA_2D$x[,1:3]), replace = TRUE)
+  protest(PCA_2D$x[,1:3][i,], PCA_3Dall$x[,1:3][i,], permutations = 0)$t0
 })
-quantile(boot_3Dall_VS_PCA_2D_from3D, c(0.025, 0.975))
+quantile(boot_2D_VS_3Dall, c(0.025, 0.975))
+
 
 
 # comparison -----
-boot_diff_2D_3Dsimp_vs_2D_2D_from3D <- replicate(9999, {
-  i <- sample(1:nrow(PCA_2D$x[,1:3]), replace = TRUE)
-  
-  protest(
-    PCA_2D$x[,1:3][i,],
-    PCA_3Dsimp$x[,1:3][i,],
-    permutations = 0
-  )$t0 -
-    protest(
-      PCA_2D$x[,1:3][i,],
-      PCA_2D_from3D$x[,1:3][i,],
-      permutations = 0
-    )$t0
-})
-
-quantile(boot_diff_2D_3Dsimp_vs_2D_2D_from3D, c(0.025, 0.975))
-
-
-boot_diff_2D_3Dsimp_vs_2D_3Dall <- replicate(9999, {
-  i <- sample(1:nrow(PCA_2D$x[,1:3]), replace = TRUE)
-  
-  protest(
-    PCA_2D$x[,1:3][i,],
-    PCA_3Dsimp$x[,1:3][i,],
-    permutations = 0
-  )$t0 -
-    protest(
-      PCA_2D$x[,1:3][i,],
-      PCA_3Dall$x[,1:3][i,],
-      permutations = 0
-    )$t0
-})
-
-quantile(boot_diff_2D_3Dsimp_vs_2D_3Dall, c(0.025, 0.975))
-
-
-boot_diff_2D_3Dsimp_vs_3Dsimp_3Dall <- replicate(9999, {
-  i <- sample(1:nrow(PCA_2D$x[,1:3]), replace = TRUE)
-  
-  protest(
-    PCA_2D$x[,1:3][i,],
-    PCA_3Dsimp$x[,1:3][i,],
-    permutations = 0
-  )$t0 -
-    protest(
-      PCA_3Dsimp$x[,1:3][i,],
-      PCA_3Dall$x[,1:3][i,],
-      permutations = 0
-    )$t0
-})
-
-quantile(boot_diff_2D_3Dsimp_vs_3Dsimp_3Dall, c(0.025, 0.975))
-
-
-boot_diff_2D_3Dsimp_vs_3Dsimp_2D_from3D <- replicate(9999, {
-  i <- sample(1:nrow(PCA_2D$x[,1:3]), replace = TRUE)
-  
-  protest(
-    PCA_2D$x[,1:3][i,],
-    PCA_3Dsimp$x[,1:3][i,],
-    permutations = 0
-  )$t0 -
-    protest(
-      PCA_3Dsimp$x[,1:3][i,],
-      PCA_2D_from3D$x[,1:3][i,],
-      permutations = 0
-    )$t0
-})
-
-quantile(boot_diff_2D_3Dsimp_vs_3Dsimp_2D_from3D, c(0.025, 0.975))
-
-
-boot_diff_2D_3Dsimp_vs_3Dall_2D_from3D <- replicate(9999, {
-  i <- sample(1:nrow(PCA_2D$x[,1:3]), replace = TRUE)
-  
-  protest(
-    PCA_2D$x[,1:3][i,],
-    PCA_3Dsimp$x[,1:3][i,],
-    permutations = 0
-  )$t0 -
-    protest(
-      PCA_3Dall$x[,1:3][i,],
-      PCA_2D_from3D$x[,1:3][i,],
-      permutations = 0
-    )$t0
-})
-
-quantile(boot_diff_2D_3Dsimp_vs_3Dall_2D_from3D, c(0.025, 0.975))
-
 
 boot_diff_2D_3Dall_vs_2D_2D_from3D <- replicate(9999, {
   i <- sample(1:nrow(PCA_2D$x[,1:3]), replace = TRUE)
@@ -955,23 +853,6 @@ boot_diff_2D_3Dall_vs_3Dsimp_2D_from3D <- replicate(9999, {
 quantile(boot_diff_2D_3Dall_vs_3Dsimp_2D_from3D, c(0.025, 0.975))
 
 
-boot_diff_2D_3Dall_vs_3Dall_2D_from3D <- replicate(9999, {
-  i <- sample(1:nrow(PCA_2D$x[,1:3]), replace = TRUE)
-  
-  protest(
-    PCA_2D$x[,1:3][i,],
-    PCA_3Dall$x[,1:3][i,],
-    permutations = 0
-  )$t0 -
-    protest(
-      PCA_3Dall$x[,1:3][i,],
-      PCA_2D_from3D$x[,1:3][i,],
-      permutations = 0
-    )$t0
-})
-
-quantile(boot_diff_2D_3Dall_vs_3Dall_2D_from3D, c(0.025, 0.975))
-
 
 boot_diff_2D_2D_from3D_vs_3Dsimp_3Dall <- replicate(9999, {
   i <- sample(1:nrow(PCA_2D$x[,1:3]), replace = TRUE)
@@ -1010,24 +891,6 @@ boot_diff_2D_2D_from3D_vs_3Dsimp_2D_from3D <- replicate(9999, {
 quantile(boot_diff_2D_2D_from3D_vs_3Dsimp_2D_from3D, c(0.025, 0.975))
 
 
-boot_diff_2D_2D_from3D_vs_3Dall_2D_from3D <- replicate(9999, {
-  i <- sample(1:nrow(PCA_2D$x[,1:3]), replace = TRUE)
-  
-  protest(
-    PCA_2D$x[,1:3][i,],
-    PCA_2D_from3D$x[,1:3][i,],
-    permutations = 0
-  )$t0 -
-    protest(
-      PCA_3Dall$x[,1:3][i,],
-      PCA_2D_from3D$x[,1:3][i,],
-      permutations = 0
-    )$t0
-})
-
-quantile(boot_diff_2D_2D_from3D_vs_3Dall_2D_from3D, c(0.025, 0.975))
-
-
 
 boot_diff_3Dsimp_3Dall_vs_3Dsimp_2D_from3D <- replicate(9999, {
   i <- sample(1:nrow(PCA_2D_from3D$x[,1:3]), replace = TRUE)
@@ -1045,40 +908,3 @@ boot_diff_3Dsimp_3Dall_vs_3Dsimp_2D_from3D <- replicate(9999, {
 })
 
 quantile(boot_diff_3Dsimp_3Dall_vs_3Dsimp_2D_from3D, c(0.025, 0.975))
-
-
-boot_diff_3Dsimp_3Dall_vs_3Dall_2D_from3D <- replicate(9999, {
-  i <- sample(1:nrow(PCA_2D_from3D$x[,1:3]), replace = TRUE)
-  
-  protest(
-    PCA_3Dsimp$x[,1:3][i,],
-    PCA_3Dall$x[,1:3][i,],
-    permutations = 0
-  )$t0 -
-    protest(
-      PCA_3Dall$x[,1:3][i,],
-      PCA_2D_from3D$x[,1:3][i,],
-      permutations = 0
-    )$t0
-})
-
-quantile(boot_diff_3Dsimp_3Dall_vs_3Dall_2D_from3D, c(0.025, 0.975))
-
-
-
-boot_diff_3Dsimp_2D_from3D_vs_3Dall_2D_from3D <- replicate(9999, {
-  i <- sample(1:nrow(PCA_2D_from3D$x[,1:3]), replace = TRUE)
-  
-  protest(
-    PCA_3Dsimp$x[,1:3][i,],
-    PCA_2D_from3D$x[,1:3][i,],
-    permutations = 0
-  )$t0 -
-    protest(
-      PCA_3Dall$x[,1:3][i,],
-      PCA_2D_from3D$x[,1:3][i,],
-      permutations = 0
-    )$t0
-})
-
-quantile(boot_diff_3Dsimp_2D_from3D_vs_3Dall_2D_from3D, c(0.025, 0.975))
