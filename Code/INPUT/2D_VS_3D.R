@@ -43,7 +43,7 @@ samples2D$chirality <- as.factor(samples2D$chirality)
 samples2D$length <- as.numeric(samples2D$length)
 
 ## 2D_from3D ----
-landmarks2D_from3D <- readland.tps(file = "INPUT/equal70.TPS", specID = "ID", readcurves = TRUE)
+landmarks2D_from3D <- readland.tps(file = "INPUT/2D_from_3D.TPS", specID = "ID", readcurves = TRUE)
 
 samples2D_from3D <- data.frame(name = rep(NA, dim(landmarks2D_from3D)[3]),
                                region = rep(NA, dim(landmarks2D_from3D)[3]),
@@ -762,10 +762,7 @@ protest(X = PCA_3Dsimp$x[,1:3], Y = PCA_3Dall$x[,1:3], permutations = 9999)
 protest(X = PCA_2D$x[,1:3], Y = PCA_3Dall$x[,1:3], permutations = 9999)
 
 
-
-
-
-# boothstrap ----
+## CI ----
 
 set.seed(42)
 
@@ -798,7 +795,7 @@ quantile(boot_2D_VS_3Dall, c(0.025, 0.975))
 
 
 
-# comparison -----
+### comparison -----
 
 boot_diff_2D_3Dall_vs_2D_2D_from3D <- replicate(9999, {
   i <- sample(1:nrow(PCA_2D$x[,1:3]), replace = TRUE)
