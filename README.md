@@ -46,9 +46,13 @@ A-3D-Versus-2D-analysis-of-Pseudofurnishius-mucianus-P1-element/
 │       ├── 2D.TPS          # Raw landmark coordinates for 2D dataset (TPS format)
 │       ├── 3Dall.TPS       # Raw landmark coordinates for 3Dall dataset (TPS format)
 │       ├── 3Dsimp.TPS      # Raw landmark coordinates for 3Dsimp dataset (TPS format)
+│       ├── 2D_from_3D.TPS      # Raw landmark coordinates for 2D-from-3D dataset (TPS format)
+│       ├── Tilt_error.TPS      # Raw landmark coordinates for assessing tilt error
+│       ├── Tilt_error.R      #  Read TPS file, run GPA , Statistical analyses (Procrustes ANOVA)
 │       └── 2D_VS_3D.R      # Read TPS file, run GPA and PCA, Statistical analyses (Procrustes permutation test)
  dataset
-│   ├── Figs/               # Figures used in MS (Fig.1-3)
+│   ├── Figs/               # Figures used in MS (Fig.1-4)
+│   ├── Tab/               # Tables used in MS (Tab.1 & 2)
 │   ├── curveslide.csv      # information about sliding semilandmarks
 │   ├── 2D_VS_3D.Rproj
 │   └──  README.md          # README for R code
